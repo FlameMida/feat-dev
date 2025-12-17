@@ -1,5 +1,5 @@
 ---
-name: feature-dev
+name: feat-dev
 description: 【自动触发】完整的功能开发工作流 - 7阶段系统化开发流程，包含代码探索、架构设计、实施和质量审查。融合 ultrathink 深度分析、MCP 工具增强和并行 agent 执行（全程中文）
 ---
 
@@ -52,7 +52,7 @@ mcp__sequential-thinking__sequentialthinking: thought="...", thoughtNumber=1, to
 
 ### 方式 2: 手动触发
 ```bash
-/feature-dev [功能描述]
+/feat-dev [功能描述]
 ```
 
 ## 专门化 Agents

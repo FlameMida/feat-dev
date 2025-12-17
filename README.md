@@ -73,28 +73,28 @@ export EXA_API_KEY="your-exa-api-key"
 
 ```bash
 # 添加为 marketplace
-/plugin marketplace add https://github.com/FlameMida/feature-dev
+/plugin marketplace add https://github.com/FlameMida/feat-dev
 
 # 安装插件
-/plugin install GodV-plugins/feature-dev
+/plugin install GodV-plugins/feat-dev
 ```
 
 ### 方式 2: 本地安装
 
-将此目录放置在 `~/.claude/plugins/repos/feature-dev/`
+将此目录放置在 `~/.claude/plugins/repos/feat-dev/`
 
 ## 使用方法
 
-### 使用 /feature-dev 命令
+### 使用 /feat-dev 命令
 
 ```bash
-/feature-dev 实现用户认证功能
+/feat-dev 实现用户认证功能
 ```
 
 或者只输入命令，按提示描述功能：
 
 ```bash
-/feature-dev
+/feat-dev
 ```
 
 ### 自动触发
@@ -133,7 +133,7 @@ export EXA_API_KEY="your-exa-api-key"
 ## 目录结构
 
 ```
-feature-dev/
+feat-dev/
 ├── .claude-plugin/
 │   ├── plugin.json         # 插件元数据
 │   └── marketplace.json    # Marketplace 配置
@@ -147,9 +147,9 @@ feature-dev/
 └── README.md
 ```
 
-## 与官方 feature-dev 的区别
+## 与官方 feat-dev 的区别
 
-| 特性 | 官方 feature-dev | feature-dev |
+| 特性 | 官方 feat-dev | feat-dev |
 |------|-----------------|----------------|
 | 语言 | 英文 | 中文 |
 | ultrathink | 无 | 融合 Sequential Thinking |
