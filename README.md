@@ -14,19 +14,42 @@
 - **语言无关**: 适用于任何编程语言和项目结构
 - **中文输出**: 全程中文沟通
 
-## MCP 工具集成
+## MCP 工具增强（推荐但可选）
 
-本插件集成以下 MCP 服务器以增强开发流程：
+### 🎯 重要说明
 
-| MCP 服务器 | 用途 | 使用阶段 |
-|-----------|------|---------|
-| **context7** | 获取最新库文档和 API 参考 | 代码探索、架构设计、实施 |
-| **exa** | 网页搜索最佳实践和代码示例 | 需求理解、架构设计、质量审查 |
-| **sequential-thinking** | 深度结构化思考（ultrathink） | 需求理解、架构设计 |
+本插件的**所有功能在没有 MCP 的情况下也能正常工作**！
 
-### MCP 配置
+插件使用智能降级策略，当 MCP 不可用时自动切换到备用方案：
 
-插件包含 `.mcp.json` 配置文件，定义了推荐的 MCP 服务器配置：
+| MCP 工具 | 主要功能 | 降级方案 | 体验差异 |
+|---------|---------|---------|----------|
+| **context7** | 最新库文档和 API 参考 | WebSearch + 项目依赖分析 | 可能返回过时文档 |
+| **exa** | 高质量网页搜索 | WebSearch | 搜索结果质量略低 |
+| **sequential-thinking** | 结构化深度思考（ultrathink） | EnterPlanMode + 思维链分析 | 结构化程度降低 |
+
+### 使用体验对比
+
+| 功能 | 有 MCP | 无 MCP（降级） |
+|------|--------|---------------|
+| 获取最新库文档 | ✅ 实时最新 API | ⚠️ 可能过时（WebSearch） |
+| 代码示例搜索 | ✅ 精准代码片段 | ⚠️ 通用搜索结果 |
+| 架构深度分析 | ✅ 结构化 ultrathink | ⚠️ 常规思维链 |
+| 整体工作流 | 🌟 最佳体验 | ✅ 完全可用 |
+
+### 🚀 快速开始（无需配置）
+
+直接使用插件，无需任何 MCP 配置即可获得完整功能（降级方案自动生效）。
+
+### 💡 推荐配置（最佳体验）
+
+如果您想获得最佳开发体验，建议在**全局配置**中安装 MCP 服务器。
+
+#### 配置步骤
+
+**1. 编辑全局配置文件**
+
+编辑 `~/.claude.json`（Windows 用户为 `%USERPROFILE%\.claude.json`）：
 
 ```json
 {
@@ -53,78 +76,51 @@
 }
 ```
 
-### 环境变量配置
+**2. 配置环境变量**
 
-使用 MCP 服务需要设置相应的 API Key：
+在 `~/.zshrc`（macOS/Linux）或 `~/.bashrc`（Linux）或系统环境变量（Windows）中添加：
 
 ```bash
-# 在 ~/.zshrc 或 ~/.bashrc 中添加
 export CONTEXT7_API_KEY="your-context7-api-key"
 export EXA_API_KEY="your-exa-api-key"
 ```
 
-获取 API Key:
+**获取 API Key**：
 - Context7: https://context7.com/
 - Exa: https://exa.ai/
-
-### MCP 依赖管理
-
-#### 如果您已安装相同的 MCP
-
-**重要提示**：如果您已经在全局配置（`~/.claude/config.json`）中安装了本插件使用的 MCP（如 context7、exa），**无需担心冲突**。
-
-Claude Code 使用**作用域优先级机制**自动处理：
-- ✅ 您的全局配置**优先级最高**
-- ✅ 插件的 MCP 配置会被自动跳过
-- ✅ 不会重复启动相同的 MCP 服务
-- ✅ 插件功能完全正常
-
-#### 配置方式
-
-**方式 1：使用插件提供的配置（推荐）**
-
-插件的 `.mcp.json` 已包含完整配置，安装插件后自动生效。无需任何手动配置。
-
-**方式 2：使用已有的全局配置**
-
-如果您已在 `~/.claude/config.json` 中配置了这些 MCP：
-- ✅ **无需重复配置**
-- ✅ Claude Code 会自动使用您的全局配置（优先级更高）
-- ✅ 插件功能完全正常
-
-**方式 3：混合使用**
-
-您可以灵活搭配：
-- 在全局配置中使用自定义的 context7 配置
-- 在插件中使用 exa 和 sequential-thinking
-- Claude Code 会智能选择正确的 MCP
 
 #### 检查 MCP 配置状态
 
 运行以下命令检查当前 MCP 配置状态：
+
 ```bash
 /check-mcp
 ```
 
 该命令会显示：
-- 哪些 MCP 已在全局配置
-- 哪些 MCP 来自插件
-- 实际正在使用的配置
+- 哪些 MCP 已配置
+- 哪些 MCP 正在使用
+- 哪些功能使用降级方案
 - 配置建议和优化提示
 
-#### 常见问题
+### ⚠️ 关于 MCP 重复安装
 
-**Q: 我已经安装了 context7，还需要额外配置吗？**
-A: 不需要。您的全局配置会自动优先于插件配置，不会产生冲突。
+**v2.0.0 版本已移除插件内置的 `.mcp.json` 配置文件**，彻底避免了与用户全局配置的重复安装问题。
 
-**Q: 如何知道正在使用哪个 MCP 配置？**
-A: 运行 `/check-mcp` 命令查看详细状态，包括配置来源和优先级信息。
+如果您：
+- ✅ 已在全局配置中安装了这些 MCP - 完美，直接使用
+- ✅ 不想安装 MCP - 没问题，降级方案自动生效
+- ✅ 部分安装了 MCP - 已有的 MCP 会被使用，其他功能降级
 
-**Q: 可以禁用插件的某个 MCP 吗？**
-A: 通常不必要。Claude Code 的作用域机制会自动处理优先级。如果您的全局配置中已有该 MCP，它会自动被使用。
+### 跨平台支持
 
-**Q: 会话开始时看到 MCP 检查提示是什么？**
-A: 插件会在会话开始时自动检测 MCP 配置状态，并提供友好提示。这有助于确保最佳体验。
+本插件 **100% 跨平台兼容**：
+- ✅ Windows（CMD、PowerShell、Git Bash）
+- ✅ macOS（Terminal、iTerm2）
+- ✅ Linux（所有主流终端）
+- ✅ WSL（Windows Subsystem for Linux）
+
+无需任何外部脚本依赖，纯 Claude Code 工具实现。
 
 ## 安装
 
@@ -194,17 +190,14 @@ A: 插件会在会话开始时自动检测 MCP 配置状态，并提供友好提
 ```
 feat-dev/
 ├── .claude-plugin/
-│   ├── plugin.json         # 插件元数据（含 SessionStart hook）
+│   ├── plugin.json         # 插件元数据
 │   └── marketplace.json    # Marketplace 配置
-├── .mcp.json               # MCP 服务器配置
 ├── agents/
 │   ├── code-explorer.md    # 代码探索 agent
 │   ├── code-architect.md   # 架构设计 agent
 │   └── code-reviewer.md    # 代码审查 agent
 ├── commands/
 │   └── check-mcp.md        # /check-mcp 命令 - 检查 MCP 配置状态
-├── scripts/
-│   └── check-mcp-setup.sh  # SessionStart hook - 会话启动检查
 ├── skills/
 │   └── skill.md            # Skill 定义（自动触发）
 ├── CHANGELOG.md            # 版本更新日志
@@ -217,18 +210,21 @@ feat-dev/
 |------|-----------------|----------------|
 | 语言 | 英文 | 中文 |
 | ultrathink | 无 | 融合 Sequential Thinking |
-| MCP 工具 | 无 | 集成 context7、exa |
+| MCP 工具 | 无 | 集成 context7、exa（可选） |
+| MCP 降级 | 无 | 智能降级方案 |
 | 模型配置 | 固定 Sonnet | 可配置（Sonnet/Opus） |
 | 自动触发 | 无 | 支持 |
+| 跨平台 | 是 | 100% 兼容（Windows/macOS/Linux） |
 
 ## 更新日志
 
 查看 [CHANGELOG.md](./CHANGELOG.md) 了解详细的版本更新历史。
 
-**最新版本**：v1.1.0 (2025-12-17)
-- ✨ 添加 SessionStart hook 自动检查 MCP 配置
-- ✨ 新增 `/check-mcp` 命令查看配置详情
-- 🔧 智能 MCP 冲突检测和处理机制
+**最新版本**：v2.0.0 (2025-12-17)
+- 💥 移除插件内置 `.mcp.json`，彻底避免 MCP 重复安装
+- ✨ Skill 支持 MCP 智能降级（无 MCP 时自动使用备用方案）
+- ✨ 100% 跨平台兼容（Windows/macOS/Linux）
+- 🔧 移除 SessionStart hook，简化架构
 
 ## 许可证
 

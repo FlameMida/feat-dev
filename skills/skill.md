@@ -7,29 +7,38 @@ description: 【自动触发】完整的功能开发工作流 - 7阶段系统化
 
 本技能提供完整的 7 阶段功能开发工作流，融合了深度分析（ultrathink）、MCP 工具增强和专门化 agents（code-explorer、code-architect、code-reviewer）的并行执行能力。
 
-## MCP 工具集成
+## MCP 工具集成（可选）
 
-本技能利用以下 MCP 工具增强开发流程：
+本技能优先使用 MCP 工具增强开发流程，但在 MCP 不可用时会**自动降级**使用传统工具。
 
-| MCP 工具 | 用途 | 使用阶段 |
-|---------|------|---------|
-| **context7** | 获取最新库文档和 API 参考 | 阶段 2、4、5 |
-| **exa** | 网页搜索最佳实践和代码示例 | 阶段 1、4、6 |
-| **sequential-thinking** | 深度结构化思考（ultrathink） | 阶段 1、4 |
+### 🎯 重要原则
 
-### MCP 工具调用示例
+**所有功能在无 MCP 环境下完全可用**。Skill 会自动检测 MCP 可用性并智能降级。
 
+### MCP 工具与降级策略
+
+| MCP 工具 | 用途 | 降级方案 | 使用阶段 |
+|---------|------|---------|---------|
+| **context7** | 获取最新库文档和 API 参考 | WebSearch + 项目依赖分析 | 阶段 2、4、5 |
+| **exa** | 高质量网页搜索和代码示例 | WebSearch | 阶段 1、4、6 |
+| **sequential-thinking** | 深度结构化思考（ultrathink） | EnterPlanMode + 思维链分析 | 阶段 1、4 |
+
+### 工具调用策略
+
+**优先尝试 MCP 工具**：
+- 如果 MCP 工具可用，优先使用以获得最佳体验
+- 如果 MCP 工具调用失败或不可用，立即切换到降级方案
+- **不要因为 MCP 不可用而中断工作流**
+
+**降级时的替代逻辑**：
 ```
-# 获取库文档 (context7)
-mcp__context7__resolve-library-id: libraryName="react"
-mcp__context7__get-library-docs: context7CompatibleLibraryID="/facebook/react", topic="hooks"
-
-# 搜索最佳实践 (exa)
-mcp__exa__web_search_exa: query="React state management best practices 2025"
-mcp__exa__get_code_context_exa: query="Next.js app router authentication"
-
-# 深度分析 (sequential-thinking)
-mcp__sequential-thinking__sequentialthinking: thought="...", thoughtNumber=1, totalThoughts=5
+尝试 MCP 工具
+  ↓
+成功 → 继续使用 MCP
+  ↓
+失败 → 切换到降级方案
+  ↓
+继续工作流（功能完整）
 ```
 
 ## 何时使用 (When to Use)
@@ -97,8 +106,12 @@ Task tool:
 - **集成点**: 需要与哪些现有系统集成？
 
 **MCP 工具使用**：
-- 🔍 **exa.web_search_exa**: 搜索类似产品/功能的实现案例，了解行业最佳实践
-- 🧠 **sequential-thinking**: 复杂需求时使用 ultrathink 进行深度分析
+- 🔍 **优先尝试 exa.web_search_exa**: 搜索类似产品/功能的实现案例，了解行业最佳实践
+  - **降级方案**：使用 WebSearch 搜索相关案例和最佳实践
+- 🧠 **复杂需求时尝试 sequential-thinking**: ultrathink 进行深度分析
+  - **降级方案**：在响应中使用详细的思维链分析（Chain of Thought）
+
+**如果 MCP 工具不可用**，不要中断工作流，立即使用降级方案继续。
 
 **何时使用 ultrathink**：
 - ✅ 需求涉及多个模块或系统的集成
@@ -113,18 +126,26 @@ Task tool:
 **首要任务**: 查找并阅读项目根目录下的 **CLAUDE.md** 文件。
 
 **MCP 工具使用**：
-- 📚 **context7.get-library-docs**: 获取项目依赖库的最新文档
-- 🔍 **exa.get_code_context_exa**: 搜索特定框架/库的代码示例
+- 📚 **优先尝试 context7.get-library-docs**: 获取项目依赖库的最新文档
+  - **降级方案**：
+    1. 使用 WebSearch 搜索官方文档
+    2. 使用 Grep 搜索项目依赖文件（package.json、go.mod、requirements.txt 等）
+    3. 使用 Read 阅读已安装的库文件或 README
+- 🔍 **优先尝试 exa.get_code_context_exa**: 搜索特定框架/库的代码示例
+  - **降级方案**：使用 WebSearch 搜索代码示例和使用教程
 
-**示例**：
+**降级方案示例**：
 ```
-# 获取项目使用的框架文档
-mcp__context7__resolve-library-id: libraryName="gin-gonic"
-mcp__context7__get-library-docs: context7CompatibleLibraryID="/gin-gonic/gin", topic="middleware"
+# context7 不可用时
+1. WebSearch: "Gin framework middleware documentation 2025"
+2. Grep: "go.mod" 查找依赖版本
+3. Read: node_modules/library/README.md 或 vendor/library/
 
-# 搜索框架使用示例
-mcp__exa__get_code_context_exa: query="Gin middleware authentication example"
+# exa 不可用时
+WebSearch: "Next.js app router authentication example code"
 ```
+
+**如果 MCP 工具不可用**，不要中断工作流，立即使用降级方案继续。
 
 **并行启动 2-3 个 code-explorer agents**（model 参考 agent 文件配置）：
 
@@ -186,18 +207,35 @@ AskUserQuestion:
 **目标**: 设计实施方案
 
 **MCP 工具使用**：
-- 🧠 **sequential-thinking**: 必须使用 ultrathink 进行深度架构分析
-- 🔍 **exa.web_search_exa**: 搜索架构模式和设计最佳实践
-- 📚 **context7.get-library-docs**: 获取框架的架构指南
+- 🧠 **必须尝试 sequential-thinking**: ultrathink 进行深度架构分析
+  - **降级方案**：
+    1. 使用 EnterPlanMode 进入规划模式
+    2. 在响应中使用详细的思维链分析
+    3. 系统性地分解问题并逐步设计
+- 🔍 **优先尝试 exa.web_search_exa**: 搜索架构模式和设计最佳实践
+  - **降级方案**：使用 WebSearch 搜索架构模式和最佳实践
+- 📚 **优先尝试 context7.get-library-docs**: 获取框架的架构指南
+  - **降级方案**：使用 WebSearch 搜索框架官方架构文档
 
-**示例**：
+**降级方案示例**：
 ```
-# 搜索架构最佳实践
-mcp__exa__web_search_exa: query="microservices authentication architecture patterns 2025"
+# sequential-thinking 不可用时
+使用 EnterPlanMode 或在响应中详细分析：
+1. 分析需求组件
+2. 设计数据结构（遵循 CLAUDE.md 规范）
+3. 设计 API 端点（遵循 CLAUDE.md 规范）
+4. 设计服务层架构
+5. 识别风险和边缘情况
+6. 规划实施步骤
 
-# 获取框架架构文档
-mcp__context7__get-library-docs: context7CompatibleLibraryID="/gin-gonic/gin", mode="info", topic="architecture"
+# exa 不可用时
+WebSearch: "microservices authentication architecture patterns 2025"
+
+# context7 不可用时
+WebSearch: "Gin framework architecture best practices official documentation"
 ```
+
+**如果 MCP 工具不可用**，不要中断工作流，立即使用降级方案继续。
 
 **必须使用 ultrathink** 进行深度架构分析：
 
@@ -234,17 +272,26 @@ Task tool:
 **前置条件**: 用户已确认架构方案
 
 **MCP 工具使用**：
-- 📚 **context7.get-library-docs**: 实时查询 API 文档，确保使用最新语法
-- 🔍 **exa.get_code_context_exa**: 搜索特定功能的实现示例
+- 📚 **优先尝试 context7.get-library-docs**: 实时查询 API 文档，确保使用最新语法
+  - **降级方案**：
+    1. 使用 WebSearch 搜索官方 API 文档
+    2. 使用 Grep 搜索项目中已有的类似实现
+    3. 使用 Read 阅读库的 README 或示例代码
+- 🔍 **优先尝试 exa.get_code_context_exa**: 搜索特定功能的实现示例
+  - **降级方案**：使用 WebSearch 搜索实现示例和教程
 
-**示例**：
+**降级方案示例**：
 ```
-# 查询特定 API 用法
-mcp__context7__get-library-docs: context7CompatibleLibraryID="/gorm/gorm", topic="associations"
+# context7 不可用时
+1. WebSearch: "GORM associations documentation latest version"
+2. Grep: "HasMany\|BelongsTo" 查找项目中的关联示例
+3. Read: vendor/gorm.io/gorm/README.md
 
-# 搜索实现示例
-mcp__exa__get_code_context_exa: query="GORM many-to-many relationship example"
+# exa 不可用时
+WebSearch: "GORM many-to-many relationship example Go code"
 ```
+
+**如果 MCP 工具不可用**，不要中断工作流，立即使用降级方案继续。
 
 **实施顺序**（按阶段 4 的计划）：
 1. 创建实体和数据库迁移
@@ -267,14 +314,17 @@ mcp__exa__get_code_context_exa: query="GORM many-to-many relationship example"
 **目标**: 确保代码质量
 
 **MCP 工具使用**：
-- 🔍 **exa.web_search_exa**: 搜索已知安全漏洞和常见 bug 模式
+- 🔍 **优先尝试 exa.web_search_exa**: 搜索已知安全漏洞和常见 bug 模式
+  - **降级方案**：使用 WebSearch 搜索安全漏洞和 bug 模式
 
-**示例**：
+**降级方案示例**：
 ```
-# 搜索安全漏洞模式
-mcp__exa__web_search_exa: query="SQL injection prevention Go GORM 2025"
-mcp__exa__web_search_exa: query="JWT security best practices vulnerabilities"
+# exa 不可用时
+WebSearch: "SQL injection prevention Go GORM 2025 security best practices"
+WebSearch: "JWT security vulnerabilities common mistakes 2025"
 ```
+
+**如果 MCP 工具不可用**，不要中断工作流，立即使用降级方案继续。
 
 **并行启动 3 个 code-reviewer agents**（model 参考 agent 文件配置）：
 
