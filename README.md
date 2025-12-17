@@ -67,6 +67,65 @@ export EXA_API_KEY="your-exa-api-key"
 - Context7: https://context7.com/
 - Exa: https://exa.ai/
 
+### MCP 依赖管理
+
+#### 如果您已安装相同的 MCP
+
+**重要提示**：如果您已经在全局配置（`~/.claude/config.json`）中安装了本插件使用的 MCP（如 context7、exa），**无需担心冲突**。
+
+Claude Code 使用**作用域优先级机制**自动处理：
+- ✅ 您的全局配置**优先级最高**
+- ✅ 插件的 MCP 配置会被自动跳过
+- ✅ 不会重复启动相同的 MCP 服务
+- ✅ 插件功能完全正常
+
+#### 配置方式
+
+**方式 1：使用插件提供的配置（推荐）**
+
+插件的 `.mcp.json` 已包含完整配置，安装插件后自动生效。无需任何手动配置。
+
+**方式 2：使用已有的全局配置**
+
+如果您已在 `~/.claude/config.json` 中配置了这些 MCP：
+- ✅ **无需重复配置**
+- ✅ Claude Code 会自动使用您的全局配置（优先级更高）
+- ✅ 插件功能完全正常
+
+**方式 3：混合使用**
+
+您可以灵活搭配：
+- 在全局配置中使用自定义的 context7 配置
+- 在插件中使用 exa 和 sequential-thinking
+- Claude Code 会智能选择正确的 MCP
+
+#### 检查 MCP 配置状态
+
+运行以下命令检查当前 MCP 配置状态：
+```bash
+/check-mcp
+```
+
+该命令会显示：
+- 哪些 MCP 已在全局配置
+- 哪些 MCP 来自插件
+- 实际正在使用的配置
+- 配置建议和优化提示
+
+#### 常见问题
+
+**Q: 我已经安装了 context7，还需要额外配置吗？**
+A: 不需要。您的全局配置会自动优先于插件配置，不会产生冲突。
+
+**Q: 如何知道正在使用哪个 MCP 配置？**
+A: 运行 `/check-mcp` 命令查看详细状态，包括配置来源和优先级信息。
+
+**Q: 可以禁用插件的某个 MCP 吗？**
+A: 通常不必要。Claude Code 的作用域机制会自动处理优先级。如果您的全局配置中已有该 MCP，它会自动被使用。
+
+**Q: 会话开始时看到 MCP 检查提示是什么？**
+A: 插件会在会话开始时自动检测 MCP 配置状态，并提供友好提示。这有助于确保最佳体验。
+
 ## 安装
 
 ### 方式 1: 从 GitHub 安装
@@ -135,16 +194,21 @@ export EXA_API_KEY="your-exa-api-key"
 ```
 feat-dev/
 ├── .claude-plugin/
-│   ├── plugin.json         # 插件元数据
+│   ├── plugin.json         # 插件元数据（含 SessionStart hook）
 │   └── marketplace.json    # Marketplace 配置
 ├── .mcp.json               # MCP 服务器配置
 ├── agents/
 │   ├── code-explorer.md    # 代码探索 agent
 │   ├── code-architect.md   # 架构设计 agent
 │   └── code-reviewer.md    # 代码审查 agent
+├── commands/
+│   └── check-mcp.md        # /check-mcp 命令 - 检查 MCP 配置状态
+├── scripts/
+│   └── check-mcp-setup.sh  # SessionStart hook - 会话启动检查
 ├── skills/
 │   └── skill.md            # Skill 定义（自动触发）
-└── README.md
+├── CHANGELOG.md            # 版本更新日志
+└── README.md               # 项目说明文档
 ```
 
 ## 与官方 feat-dev 的区别
@@ -156,6 +220,15 @@ feat-dev/
 | MCP 工具 | 无 | 集成 context7、exa |
 | 模型配置 | 固定 Sonnet | 可配置（Sonnet/Opus） |
 | 自动触发 | 无 | 支持 |
+
+## 更新日志
+
+查看 [CHANGELOG.md](./CHANGELOG.md) 了解详细的版本更新历史。
+
+**最新版本**：v1.1.0 (2025-12-17)
+- ✨ 添加 SessionStart hook 自动检查 MCP 配置
+- ✨ 新增 `/check-mcp` 命令查看配置详情
+- 🔧 智能 MCP 冲突检测和处理机制
 
 ## 许可证
 
