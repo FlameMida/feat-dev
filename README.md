@@ -111,7 +111,6 @@ export EXA_API_KEY="your-exa-api-key"
 
 ## 安装
 
-### 方式 1: 从 GitHub 安装
 
 ```bash
 # 添加为 marketplace
@@ -120,10 +119,6 @@ export EXA_API_KEY="your-exa-api-key"
 # 安装插件
 /plugin install feat-dev@GodV-plugins
 ```
-
-### 方式 2: 本地安装
-
-将此目录放置在 `~/.claude/plugins/repos/feat-dev/`
 
 ## 使用方法
 
