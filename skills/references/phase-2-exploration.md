@@ -39,11 +39,8 @@ Read: /path/to/project/CLAUDE.md
 
 ```
 Task tool:
-- subagent_type: general-purpose
-- model: [从 agents/code-explorer.md YAML 中读取]
-- prompt: "[code-explorer.md 完整内容]
-
-任务：探索与 [功能名称] 相关的实体定义和数据模型
+- subagent_type: feat-dev:code-explorer
+- prompt: "任务：探索与 [功能名称] 相关的实体定义和数据模型
 
 具体要求：
 1. 查找现有的实体定义（Entity/Model 文件）
@@ -66,11 +63,8 @@ Task tool:
 
 ```
 Task tool:
-- subagent_type: general-purpose
-- model: [从 agents/code-explorer.md YAML 中读取]
-- prompt: "[code-explorer.md 完整内容]
-
-任务：探索与 [功能名称] 相关的服务层实现和业务逻辑
+- subagent_type: feat-dev:code-explorer
+- prompt: "任务：探索与 [功能名称] 相关的服务层实现和业务逻辑
 
 具体要求：
 1. 查找现有的服务层文件（Service/Repository）
@@ -93,11 +87,8 @@ Task tool:
 
 ```
 Task tool:
-- subagent_type: general-purpose
-- model: [从 agents/code-explorer.md YAML 中读取]
-- prompt: "[code-explorer.md 完整内容]
-
-任务：探索与 [功能名称] 相关的 API 端点和控制器
+- subagent_type: feat-dev:code-explorer
+- prompt: "任务：探索与 [功能名称] 相关的 API 端点和控制器
 
 具体要求：
 1. 查找现有的控制器/路由处理器

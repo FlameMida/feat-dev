@@ -14,11 +14,8 @@
 
 ```
 Task tool:
-- subagent_type: general-purpose
-- model: [从 agents/code-reviewer.md YAML 中读取]
-- prompt: "[code-reviewer.md 完整内容]
-
-审查焦点：Bug 和逻辑错误
+- subagent_type: feat-dev:code-reviewer
+- prompt: "审查焦点：Bug 和逻辑错误
 
 审查范围：
 [列出本次实施的所有文件路径]
@@ -42,11 +39,8 @@ Task tool:
 
 ```
 Task tool:
-- subagent_type: general-purpose
-- model: [从 agents/code-reviewer.md YAML 中读取]
-- prompt: "[code-reviewer.md 完整内容]
-
-审查焦点：代码风格和质量
+- subagent_type: feat-dev:code-reviewer
+- prompt: "审查焦点：代码风格和质量
 
 审查范围：
 [列出本次实施的所有文件路径]
@@ -70,11 +64,8 @@ Task tool:
 
 ```
 Task tool:
-- subagent_type: general-purpose
-- model: [从 agents/code-reviewer.md YAML 中读取]
-- prompt: "[code-reviewer.md 完整内容]
-
-审查焦点：项目规范遵循
+- subagent_type: feat-dev:code-reviewer
+- prompt: "审查焦点：项目规范遵循
 
 CLAUDE.md 规范：
 [粘贴 CLAUDE.md 的关键规范]

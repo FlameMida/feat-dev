@@ -151,11 +151,8 @@ WebSearch: "Next.js architecture guide official docs 2025"
 
 ```
 Task tool:
-- subagent_type: general-purpose
-- model: [从 agents/code-architect.md YAML 中读取]
-- prompt: "[code-architect.md 完整内容]
-
-任务：为 [功能名称] 设计详细的架构蓝图
+- subagent_type: feat-dev:code-architect
+- prompt: "任务：为 [功能名称] 设计详细的架构蓝图
 
 需求概述：
 [阶段 1 的需求理解]
