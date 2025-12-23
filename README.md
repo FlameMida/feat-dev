@@ -144,11 +144,11 @@ export EXA_API_KEY="your-exa-api-key"
 
 ## 专门化 Agents
 
-| Agent | 颜色 | 模型 | 用途 |
-|-------|------|------|------|
-| **code-explorer** | 黄色 | Sonnet | 深度分析代码库，追踪执行路径 |
-| **code-architect** | 绿色 | Opus | 设计架构蓝图，制定实施方案 |
-| **code-reviewer** | 红色 | Sonnet | 代码审查，识别 bug 和规范问题 |
+| Agent | 颜色 | 模型     | 用途 |
+|-------|------|--------|------|
+| **code-explorer** | 黄色 | haiku  | 深度分析代码库，追踪执行路径 |
+| **code-architect** | 绿色 | sonnet | 设计架构蓝图，制定实施方案 |
+| **code-reviewer** | 红色 | haiku  | 代码审查，识别 bug 和规范问题 |
 
 ## 7 阶段工作流
 
