@@ -31,7 +31,7 @@ description: 【当用户提出功能开发、API设计、数据库设计等需�
 ### 方式 2: 手动触发命令
 显式调用技能：
 ```bash
-/RA
+/requirement-analysis
 ```
 
 ### 方式 3: 在消息中明确提示

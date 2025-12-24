@@ -123,24 +123,48 @@ export EXA_API_KEY="your-exa-api-key"
 
 ## 使用方法
 
-### 使用 /feat-dev 命令
+本插件提供**两个主要 skill**，可根据需求选择使用：
 
+### 1. feat-dev - 完整功能开发工作流
+
+**适用场景**：复杂功能开发、多模块实施、需要架构设计的任务
+
+**使用方式**：
 ```bash
 /feat-dev 实现用户认证功能
 ```
 
-或者只输入命令，按提示描述功能：
+**工作流程**：7 个完整阶段（需求理解 → 代码探索 → 澄清问题 → 架构设计 → 实施 → 质量审查 → 总结）
 
+**示例**：
 ```bash
-/feat-dev
+/feat-dev 实现一个支持多租户的订单管理系统，包括订单创建、状态跟踪和报表统计功能
+```
+
+### 2. requirement-analysis - 需求分析工作流
+
+**适用场景**：快速需求分析、前期设计规划、需要深度分析但不立即实施的场景
+
+**使用方式**：
+```bash
+/requirement-analysis 分析用户权限系统的实现方案
+```
+```bash
+分析用户权限系统的实现方案 使用需求分析skill
+```
+**工作流程**：聚焦前期分析（需求理解 → 代码探索 → 外部资源研究 → 澄清问题 → 深度分析 → 展示计划），可选择性进入实施和代码审查阶段
+
+**示例**：
+```bash
+分析如何集成第三方支付系统（支付宝、微信支付），提供技术方案
 ```
 
 ### 自动触发
 
-当你提出以下类型的需求时，会自动使用此工作流：
-- "我需要实现一个 XXX 功能"
-- "帮我开发 XXX 模块"
-- "需要添加 XXX 特性"
+当你提出以下类型的需求时，系统会自动选择合适的 skill：
+- "我需要实现一个 XXX 功能" → 自动使用 **feat-dev**
+- "帮我分析 XXX 的实现方案" → 自动使用 **requirement-analysis**
+- "需要设计 XXX 的架构" → 自动使用 **requirement-analysis**
 
 ## 专门化 Agents
 
@@ -150,7 +174,7 @@ export EXA_API_KEY="your-exa-api-key"
 | **code-architect** | 绿色 | sonnet | 设计架构蓝图，制定实施方案 |
 | **code-reviewer** | 红色 | haiku  | 代码审查，识别 bug 和规范问题 |
 
-## 7 阶段工作流
+## feat-dev 的 7 阶段工作流
 
 ```
 阶段 1: 需求理解 (Discovery)
@@ -182,7 +206,10 @@ feat-dev/
 ├── commands/
 │   └── check-mcp.md        # /check-mcp 命令 - 检查 MCP 配置状态
 ├── skills/
-│   └── skill.md            # Skill 定义（自动触发）
+│   ├── feat-dev/           # 完整功能开发工作流 skill
+│   │   └── skill.md
+│   └── requirement-analysis/  # 需求分析工作流 skill
+│       └── skill.md
 ├── CHANGELOG.md            # 版本更新日志
 └── README.md               # 项目说明文档
 ```
